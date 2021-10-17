@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'widgets/userTransaction.dart';
+
 void main() {
   runApp(MyApp());
 }
@@ -31,16 +33,17 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text("Expense Tracker"),
       ),
       body: Center(
-        child: Column(
-          children: <Widget>[
-            Card(
-              child: Container(width: 100, child: Text("CHART")),
-              elevation: 5,
-            ),
-            Card(
-              child: Text("EXPENSE List"),
-            ),
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Card(
+                child: Container(width: double.infinity, child: Text("CHART")),
+                elevation: 5,
+              ),
+              UserTransaction(),
+            ],
+          ),
         ),
       ),
     );
