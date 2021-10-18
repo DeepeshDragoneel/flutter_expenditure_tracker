@@ -45,7 +45,8 @@ class _MyHomePageState extends State<MyHomePage> {
   final List<Transaction> transactions = [
     Transaction("t1", "Book", 180, DateTime.now()),
     Transaction("t2", "Shirt", 2000, DateTime.now()),
-    Transaction("t3", "Shoes", 4000, DateTime.now().subtract(Duration(days: 1))),
+    Transaction(
+        "t3", "Shoes", 4000, DateTime.now().subtract(Duration(days: 1))),
   ];
 
   List<Transaction> get weekTransactions {
@@ -61,6 +62,12 @@ class _MyHomePageState extends State<MyHomePage> {
 
     setState(() {
       transactions.add(newTransaction);
+    });
+  }
+
+  void deleteTransaction(String id) {
+    setState(() {
+      transactions.removeWhere((element) => element.id == id);
     });
   }
 
@@ -95,7 +102,7 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
             Chart(weekTransactions),
-            TransactionList(transactions),
+            TransactionList(transactions, deleteTransaction),
           ],
         ),
       ),
