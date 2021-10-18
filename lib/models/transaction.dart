@@ -6,5 +6,5 @@ class Transaction {
   final double cost;
   final DateTime date;
 
-  Transaction(@required this.id, @required this.title, @required this.cost, @required this.date);
+  Transaction( this.id, this.title, this.cost, this.date);
 }

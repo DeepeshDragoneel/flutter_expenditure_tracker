@@ -27,7 +27,7 @@ class Chart extends StatelessWidget {
       };
       print(dayTransaction);
       return dayTransaction;
-    });
+    }).reversed.toList();
   }
 
   double get spentPercentage {
@@ -45,17 +45,18 @@ class Chart extends StatelessWidget {
       child: Container(
         padding: EdgeInsets.all(10),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: groupTransactionsWeekly
               .map((transaction) => Flexible(
-                fit: FlexFit.tight,
-                child: (BarChart(
-                    transaction["day"].toString(),
-                    (transaction["cost"] as double),
-                    spentPercentage == 0.0
-                        ? 0.0
-                        : (transaction["cost"] as double) / spentPercentage)),
-              ))
+                    fit: FlexFit.tight,
+                    child: (BarChart(
+                        transaction["day"].toString(),
+                        (transaction["cost"] as double),
+                        spentPercentage == 0.0
+                            ? 0.0
+                            : (transaction["cost"] as double) /
+                                spentPercentage)),
+                  ))
               .toList(),
         ),
       ),

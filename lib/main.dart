@@ -55,9 +55,9 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   @override
-  void addNewTransaction(String title, double amount) {
+  void addNewTransaction(String title, double amount, DateTime date) {
     final newTransaction =
-        Transaction(DateTime.now().toString(), title, amount, DateTime.now());
+        Transaction(DateTime.now().toString(), title, amount, date);
 
     setState(() {
       transactions.add(newTransaction);

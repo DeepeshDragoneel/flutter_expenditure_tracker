@@ -12,7 +12,10 @@ class BarChart extends StatelessWidget {
     return Container(
         child: Column(
       children: [
-        FittedBox(child: Text("₹${cost.toStringAsFixed(0)}")),
+        Container(
+            height: 20,
+            margin: EdgeInsets.all(3),
+            child: FittedBox(child: Text("₹${cost.toStringAsFixed(0)}"))),
         Container(
             height: 60,
             width: 10,
