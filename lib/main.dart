@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -103,6 +105,8 @@ class _MyHomePageState extends State<MyHomePage> {
     final isLandscape =
         MediaQuery.of(context).orientation == Orientation.landscape;
 
+    final mediaQuery = MediaQuery.of(context);
+
     final appBar = AppBar(
       title: Text("Expense Tracker"),
       actions: [
@@ -115,9 +119,9 @@ class _MyHomePageState extends State<MyHomePage> {
     );
 
     final TransactionListVar = Container(
-        height: (MediaQuery.of(context).size.height -
+        height: (mediaQuery.size.height -
                 appBar.preferredSize.height -
-                MediaQuery.of(context).padding.top) *
+                mediaQuery.padding.top) *
             0.7,
         child: TransactionList(transactions, deleteTransaction));
     return Scaffold(
@@ -131,38 +135,40 @@ class _MyHomePageState extends State<MyHomePage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Text("Show"),
-                    Switch(
+                    Switch.adaptive(
                         value: displayActive,
                         onChanged: (context) => toggleDisplay()),
                   ]),
             if (!isLandscape)
               Container(
-                  height: (MediaQuery.of(context).size.height -
+                  height: (mediaQuery.size.height -
                           appBar.preferredSize.height -
-                          MediaQuery.of(context).padding.top) *
+                          mediaQuery.padding.top) *
                       0.3,
                   child: Chart(weekTransactions)),
             if (!isLandscape) TransactionListVar,
             if (isLandscape)
               !displayActive
                   ? Container(
-                      height: (MediaQuery.of(context).size.height -
+                      height: (mediaQuery.size.height -
                               appBar.preferredSize.height -
-                              MediaQuery.of(context).padding.top) *
+                              mediaQuery.padding.top) *
                           0.7,
                       child: Chart(weekTransactions))
                   : TransactionListVar,
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(
-          Icons.add,
-        ),
-        onPressed: () => startNewTransaction(context),
-        backgroundColor: Colors.blue,
-        foregroundColor: Colors.white,
-      ),
+      floatingActionButton: Platform.isIOS
+          ? Container()
+          : FloatingActionButton(
+              child: Icon(
+                Icons.add,
+              ),
+              onPressed: () => startNewTransaction(context),
+              backgroundColor: Colors.blue,
+              foregroundColor: Colors.white,
+            ),
     );
   }
 }
