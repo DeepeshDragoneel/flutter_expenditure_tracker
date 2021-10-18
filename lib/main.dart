@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'widgets/chart.dart';
 import 'widgets/addTransaction.dart';
 import 'widgets/transactionList.dart';
 import 'models/transaction.dart';
@@ -42,10 +43,16 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final List<Transaction> transactions = [
-    // Transaction("t1", "Book", 180, DateTime.now()),
-    // Transaction("t2", "Shirt", 2000, DateTime.now()),
+    Transaction("t1", "Book", 180, DateTime.now()),
+    Transaction("t2", "Shirt", 2000, DateTime.now()),
     // Transaction("t3", "Shoes", 4000, DateTime.now()),
   ];
+
+  List<Transaction> get weekTransactions {
+    return transactions.where((element) {
+      return element.date.isAfter(DateTime.now().subtract(Duration(days: 7)));
+    }).toList();
+  }
 
   @override
   void addNewTransaction(String title, double amount) {
@@ -83,18 +90,13 @@ class _MyHomePageState extends State<MyHomePage> {
               child: Icon(Icons.add_circle_outline)),
         ],
       ),
-      body: Center(
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: <Widget>[
-              Card(
-                child: Container(width: double.infinity, child: Text("CHART")),
-                elevation: 5,
-              ),
-              TransactionList(transactions),
-            ],
-          ),
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            Chart(weekTransactions),
+            TransactionList(transactions),
+          ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
