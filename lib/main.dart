@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'widgets/chart.dart';
 import 'widgets/addTransaction.dart';
@@ -6,6 +7,11 @@ import 'widgets/transactionList.dart';
 import 'models/transaction.dart';
 
 void main() {
+  // WidgetsFlutterBinding.ensureInitialized();
+  // SystemChrome.setPreferredOrientations([
+  //   DeviceOrientation.portraitUp,
+  //   DeviceOrientation.portraitDown,
+  // ]);
   runApp(MyApp());
 }
 
@@ -55,6 +61,14 @@ class _MyHomePageState extends State<MyHomePage> {
     }).toList();
   }
 
+  bool displayActive = false;
+
+  void toggleDisplay() {
+    setState(() {
+      displayActive = !displayActive;
+    });
+  }
+
   @override
   void addNewTransaction(String title, double amount, DateTime date) {
     final newTransaction =
@@ -86,23 +100,58 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final isLandscape =
+        MediaQuery.of(context).orientation == Orientation.landscape;
+
+    final appBar = AppBar(
+      title: Text("Expense Tracker"),
+      actions: [
+        TextButton(
+            style: ButtonStyle(
+                foregroundColor: MaterialStateProperty.all(Colors.white)),
+            onPressed: () => startNewTransaction(context),
+            child: Icon(Icons.add_circle_outline)),
+      ],
+    );
+
+    final TransactionListVar = Container(
+        height: (MediaQuery.of(context).size.height -
+                appBar.preferredSize.height -
+                MediaQuery.of(context).padding.top) *
+            0.7,
+        child: TransactionList(transactions, deleteTransaction));
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Expense Tracker"),
-        actions: [
-          TextButton(
-              style: ButtonStyle(
-                  foregroundColor: MaterialStateProperty.all(Colors.white)),
-              onPressed: () => startNewTransaction(context),
-              child: Icon(Icons.add_circle_outline)),
-        ],
-      ),
+      appBar: appBar,
       body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
-            Chart(weekTransactions),
-            TransactionList(transactions, deleteTransaction),
+            if (isLandscape)
+              Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text("Show"),
+                    Switch(
+                        value: displayActive,
+                        onChanged: (context) => toggleDisplay()),
+                  ]),
+            if (!isLandscape)
+              Container(
+                  height: (MediaQuery.of(context).size.height -
+                          appBar.preferredSize.height -
+                          MediaQuery.of(context).padding.top) *
+                      0.3,
+                  child: Chart(weekTransactions)),
+            if (!isLandscape) TransactionListVar,
+            if (isLandscape)
+              !displayActive
+                  ? Container(
+                      height: (MediaQuery.of(context).size.height -
+                              appBar.preferredSize.height -
+                              MediaQuery.of(context).padding.top) *
+                          0.7,
+                      child: Chart(weekTransactions))
+                  : TransactionListVar,
           ],
         ),
       ),

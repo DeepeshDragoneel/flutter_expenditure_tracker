@@ -25,7 +25,7 @@ class Chart extends StatelessWidget {
         "day": DateFormat.E().format(today).substring(0, 1),
         "cost": totalTransaction
       };
-      print(dayTransaction);
+      // print(dayTransaction);
       return dayTransaction;
     }).reversed.toList();
   }
@@ -39,25 +39,27 @@ class Chart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 6,
-      margin: EdgeInsets.all(20),
-      child: Container(
-        padding: EdgeInsets.all(10),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: groupTransactionsWeekly
-              .map((transaction) => Flexible(
-                    fit: FlexFit.tight,
-                    child: (BarChart(
-                        transaction["day"].toString(),
-                        (transaction["cost"] as double),
-                        spentPercentage == 0.0
-                            ? 0.0
-                            : (transaction["cost"] as double) /
-                                spentPercentage)),
-                  ))
-              .toList(),
+    return Container(
+      child: Card(
+        elevation: 6,
+        margin: EdgeInsets.all(20),
+        child: Container(
+          padding: EdgeInsets.all(10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: groupTransactionsWeekly
+                .map((transaction) => Flexible(
+                      fit: FlexFit.tight,
+                      child: (BarChart(
+                          transaction["day"].toString(),
+                          (transaction["cost"] as double),
+                          spentPercentage == 0.0
+                              ? 0.0
+                              : (transaction["cost"] as double) /
+                                  spentPercentage)),
+                    ))
+                .toList(),
+          ),
         ),
       ),
     );
